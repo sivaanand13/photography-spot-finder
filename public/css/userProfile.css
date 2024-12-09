@@ -169,6 +169,23 @@ h3 {
   text-align: center;
 }
 
+.verification-status {
+  font-size: 1em;
+  margin-top: 0.5em;
+}
+
+.verification-status.verified {
+  color: green;
+}
+
+.verification-status.pending {
+  color: blue;
+}
+
+.verification-status.unverified {
+  color: red;
+}
+
 @media (max-width: 35em) {
   .activity-sections {
     grid-template-columns: 1fr;

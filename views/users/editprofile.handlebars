@@ -3,20 +3,32 @@
     <form method="POST" class="mainForms" id="editprofile-form">
         <label>
             First Name
-            <input type="text" name="firstName" placeholder="First Name" value="{{data.firstName}}" id="first-name"
-                required>
+            <input type="text" name="firstName" placeholder="First Name" value="{{data.firstName}}" id="first-name" required>
         </label>
 
         <label>
             Last Name
-            <input type="text" name="lastName" placeholder="Last Name" value="{{data.lastName}}" id="last-name"
-                required>
+            <input type="text" name="lastName" placeholder="Last Name" value="{{data.lastName}}" id="last-name" required>
         </label>
 
         <label>
             Email
             <input type="text" name="email" placeholder="Email" value="{{data.email}}" id="email" required>
         </label>
+        {{#if data.isVerified}}
+        <button type="button" id="change-email">Change Email</button>
+        {{else}}
+        <button type="button" id="send-otp">Send OTP</button>
+        {{/if}}
+        <br>
+                <div id="otp-section" style="display: none;">
+            <label>
+                Enter OTP
+                <input type="text" name="otp" placeholder="OTP" id="otp">
+            </label>
+            <button type="button" id="verify-otp">Verify OTP</button>
+            <p id="otp-error" style="color: red;"></p>
+        </div>
 
         <label>
             Bio
@@ -24,26 +36,76 @@
         </label>
 
         <input type="hidden" name="current-username" value="{{user.username}}" id="current-username">
-
         <input type="hidden" name="_method" value="PATCH">
 
         <div class="formInputError" id="form-errors-div">
             {{#if hasErrors}}
             {{#each errors}}
-            <p>
-                {{this}}
-            <p>
-                {{/each}}
-                {{/if}}
+            <p>{{this}}</p>
+            {{/each}}
+            {{/if}}
         </div>
         <div class="form_buttons">
-            <button type="reset" id="back-to-profile">
-                Back to Profile
-            </button>
+            <button type="reset" id="back-to-profile">Back to Profile</button>
             <button type="submit" formaction="/users/editprofile">Confirm Changes</button>
         </div>
     </form>
 </section>
-<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <script type="module" src="/public/js/users/editprofile_validation.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#send-otp').click(async function() {
+            const email = $('#email').val();
+            const response = await fetch('/users/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+            const result = await response.json();
+            if (result.success) {
+                $('#otp-section').show();
+            } else {
+                alert('Failed to send OTP');
+            }
+        });
+
+        $('#change-email').click(async function() {
+            const email = $('#email').val();
+            const response = await fetch('/users/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+            const result = await response.json();
+            if (result.success) {
+                $('#otp-section').show();
+            } else {
+                alert('Failed to send OTP');
+            }
+        });
+
+        $('#verify-otp').click(async function() {
+            const otp = $('#otp').val();
+            const response = await fetch('/users/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ otp })
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('OTP verified successfully');
+                $('#otp-section').hide();
+            } else {
+                $('#otp-error').text('Incorrect OTP');
+            }
+        });
+    });
+    
+</script>

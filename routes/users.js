@@ -3,6 +3,10 @@ import validation from "../validation.js";
 import { userData } from "../data/index.js";
 import logging from "../log.js";
 import { contestSubmissions } from "../config/mongoCollections.js";
+import { sendVerificationEmail, verifyOtp } from "../emailVerification.js";
+
+
+
 const router = express.Router();
 
 router
@@ -237,7 +241,9 @@ router
       .render("users/editprofile", { data: userInfo, user: req.session.user });
   })
   .patch(async (req, res) => {
+  
     const updateData = req.body;
+    //console.log("printing");
     console.log(updateData);
     let errors = [];
     if (!req.session.user) {
@@ -573,5 +579,137 @@ router
       styles: [`<link rel="stylesheet" href="/public/css/userSearch.css">`],
     });
   });
+
+
+  router.post("/send-otp", async (req, res) => {
+    const { email } = req.body;
+    try {
+      const user = await userData.getUserProfileByUsername(req.session.user.username);
+      const result = await sendVerificationEmail(user._id, email);
+      res.json(result);
+    } catch (e) {
+      res.json({ success: false, error: e.message });
+    }
+  });
+  
+  router.post("/verify-otp", async (req, res) => {
+    const { otp, newEmail } = req.body;
+    try {
+      const user = await userData.getUserProfileByUsername(req.session.user.username);
+      const result = await verifyOtp(user._id, otp, newEmail);
+      res.json(result);
+    } catch (e) {
+      res.json({ success: false, error: e.message });
+    }
+  });
+  
+  router.route("/editprofile")
+    .get(async (req, res) => {
+      let errors = [];
+      if (!req.session.user) {
+        errors.push("You must login before trying to edit profile!");
+        req.session.authorizationErrors = errors;
+        return res.status(401).redirect("/users/login");
+      }
+      let userId = req.session.user._id;
+      try {
+        userId = validation.validateString(userId.toString(), "userId", true);
+      } catch (e) {
+        errors = errors.concat(e);
+      }
+      let userInfo;
+      try {
+        userInfo = await userData.getUserProfileById(userId);
+      } catch (e) {
+        errors = errors.concat(e);
+      }
+      if (errors.length > 0) {
+        req.session.authorizationErrors = errors;
+        return res.status(401).redirect("/users/login");
+      }
+      return res.status(200).render("users/editprofile", { data: userInfo, user: req.session.user });
+    })
+    .patch(async (req, res) => {
+      const updateData = req.body;
+      let errors = [];
+      if (!req.session.user) {
+        errors.push("You must login before trying to edit profile!");
+        req.session.authorizationErrors = errors;
+        return res.status(401).redirect("/users/login");
+      }
+      let userId = req.session.user._id;
+      try {
+        userId = validation.validateString(userId.toString(), "userId", true);
+      } catch (e) {
+        errors = errors.concat(e);
+      }
+      let userInfo;
+      try {
+        userInfo = await userData.getUserProfileById(userId);
+      } catch (e) {
+        errors = errors.concat(e);
+      }
+      if (errors.length > 0) {
+        req.session.authorizationErrors = errors;
+        return res.status(401).redirect("/users/login");
+      }
+  
+      // Set OTP-related fields to null
+      updateData.otp = null;
+      updateData.otpExpiration = null;
+  
+      try {
+        await userData.updateUserProfile(updateData);
+      } catch (e) {
+        errors = errors.concat(e);
+        return res.status(400).render("users/editprofile", {
+          errors,
+          hasErrors: true,
+          data: updateData,
+          user: req.session.user,
+        });
+      }
+      return res.status(200).redirect(`/users/profile/${req.session.user.username}`);
+    });
+  
+  router.route("/editprofile/removeEmail").delete(async (req, res) => {
+    let errors = [];
+    if (!req.session.user) {
+      errors.push("You must login before trying to update profile!");
+      req.session.authorizationErrors = errors;
+      return res.status(401).redirect("/users/login");
+    }
+    let userId = req.session.user._id;
+    try {
+      userId = validation.validateString(userId.toString(), "userId", true);
+    } catch (e) {
+      errors = errors.concat(e);
+    }
+    let userInfo;
+    try {
+      userInfo = await userData.getUserProfileById(userId);
+    } catch (e) {
+      errors = errors.concat(e);
+    }
+    if (errors.length > 0) {
+      req.session.authorizationErrors = errors;
+      return res.status(401).redirect("/users/login");
+    }
+    let acknowledged;
+    try {
+      acknowledged = await userData.removeEmail(userId);
+      return res.redirect(`/users/profile/${req.session.user.username}`);
+    } catch (e) {
+      errors = errors.concat(e);
+    }
+    if (!acknowledged || !acknowledged.emailRemoved) {
+      return res.status(500).render("error", {
+        message: "500: Internal Server Error",
+        user: req.session.user,
+      });
+    }
+  });
+  
+ 
 
 export default router;

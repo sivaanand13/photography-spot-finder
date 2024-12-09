@@ -40,8 +40,16 @@
   {{#if sameUser}}
   {{#if profile.email}}
   <p class="bio">{{profile.email}}</p>
+   {{#if profile.isVerified}}
+  <p class="verification-status verified">Verified User</p>
+  {{else}}
+  <p class="verification-status pending">Pending Verification</p>
+  {{/if}}
+  {{else}}
+  <p class="verification-status unverified">Unverified User</p>
   {{/if}}
   {{/if}}
+
   {{#if profile.bio}}<p class="bio">{{profile.bio}}</p>{{/if}}
 </section>
 

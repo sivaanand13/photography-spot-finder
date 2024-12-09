@@ -82,6 +82,7 @@ app.use("*", (req, res, next) => {
     },
     { url: "spots/favorite", error: "favorite a spot!" },
     { url: "users/editprofile", error: "edit profile!" },
+    { url: "/admin", error: "access admin console!" },
     { url: "users/updatepassword", error: "update password!" },
     { url: "spots/favorite", error: "flag a spot!" },
     { url: "spots/comment/flag", error: "flag a spot comment!" },
@@ -129,7 +130,7 @@ app.use("/users/signup", (req, res, next) => {
     next();
   }
 });
-
+/*
 app.use("/admin", (req, res, next) => {
   if (req.session.user) {
     if (req.session.user.role !== "admin") {
@@ -142,7 +143,7 @@ app.use("/admin", (req, res, next) => {
     return res.redirect("/users/login");
   }
   next();
-});
+});*/
 
 configRoutes(app);
 
