@@ -1,16 +1,155 @@
-# PHOTOGRAPHY SPOT FINDER - NYC
 
-This web application allows users to discover and share top photography locations in New York City and surrounding areas. Designed for both professional and amateur photographers, it helps users find the best spots for photo shoots, ranging from scenic spots and iconic landmarks to hidden gems. Users can browse locations, contribute their own, and interact with the community through comments and ratings.
-Users can freely browse the site without the need to sign up. However, contributing photography spots, commenting, rating, and reporting photos require users to create an account.
+# Photography Spot Finder - NYC
 
-## How to Setup
+Discover, share, and explore the best photography locations in New York City! Photography Spot Finder is a full-stack web application for photographers to find, rate, and contribute top photo spots, with robust geospatial search, image management, and community features.
 
-Step 1: Run `npm install` to install all the required dependencies of the project
+---
 
-Step 2: Run `npm run seed` to seed the Database (The Database's name is photography-spot-finder)
+## Table of Contents
+- [Demo Preview](#demo-preview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Security & Validation](#security--validation)
+- [Setup & Local Development](#setup--local-development)
+- [Testing & CI](#testing--ci)
+- [Seeding & Exporting Data](#seeding--exporting-data)
+- [Contribution](#contribution)
+- [License](#license)
+- [Contact](#contact)
 
-Step 3: Setup the `.env` file in the root directory with the following variables.
+---
 
+## Demo Preview
+
+
+### Landing Page
+<p align="center">
+   <img src="./assets/gifs/landing.gif" alt="Landing Page" width="500px" />
+</p>
+
+### Spot Details
+<p align="center">
+   <img src="./assets/gifs/spot-detail.gif" alt="Spot Details" width="500px" />
+</p>
+
+### Spots Search
+<p align="center">
+   <img src="./assets/gifs/spots-search.gif" alt="Spots Search" width="500px" />
+</p>
+
+### Geospatial Search
+<p align="center">
+   <img src="./assets/gifs/geospatial-search.gif" alt="Geospatial Search" width="500px" />
+</p>
+
+### Contest Page
+<p align="center">
+   <img src="./assets/gifs/photo-contest.gif" alt="Contest" width="500px" />
+</p>
+
+### Spot Submission
+<p align="center">
+   <img src="./assets/gifs/post-spots.gif" alt="Spot Submission" width="500px" />
+</p>
+
+### Admin Panel
+<p align="center">
+   <img src="./assets/gifs/admin-panel.gif" alt="Admin Panel" width="500px" />
+</p>
+
+### User Profile
+<p align="center">
+   <img src="./assets/gifs/user-profile.gif" alt="User Profile" width="500px" />
+</p>
+
+### Public User Profile
+<p align="center">
+   <img src="./assets/gifs/public-user-profile.gif" alt="Public Profile" width="500px" />
+</p>
+
+### User Signup
+<p align="center">
+   <img src="./assets/gifs/signup.gif" alt="Signup" width="500px" />
+</p>
+
+### User Verification
+<p align="center">
+   <img src="./assets/gifs/user-verification.gif" alt="User Verification" width="500px" />
+</p>
+
+---
+
+
+## Features
+
+### User Features
+- **Geospatial Search:** Find spots near your location using interactive Mapbox maps and MongoDB geospatial queries.
+- **Image Uploads:** Upload and manage spot images with Cloudinary. Images are automatically deleted from the cloud when assets are removed.
+- **Spot Submission:** Add new spots with location, description, accessibility, best times, images, and tags.
+- **Ratings & Favorites:** Rate spots (1-10), add comments, and save favorite locations.
+- **Monthly Photo Contest:** Submit photos to monthly contests, vote on entries, and view contest leaders. AJAX-powered for seamless UX.
+- **User Profiles:** Edit your profile, view your activity, and manage your favorite spots.
+- **Search & Filter:** Search by keyword, tag, or distance. Filter results for easy discovery.
+- **Email Verification:** Secure sign-up and email verification via OTP.
+- **Public Profiles:** View other users’ public profiles, including their spots, comments, and contest entries.
+
+### Admin & Moderation
+- **Reporting:** Report inappropriate spots, comments, or contest entries. Admins can review and moderate flagged content.
+- **Admin Panel:** Manage reported content, clear reports, and remove problematic assets.
+
+### Engineering & Security
+- **Security:**
+   - XSS sanitization on all user input (xss package)
+   - Passwords hashed with bcrypt
+   - Session management with express-session
+   - Email/OTP verification for account security
+- **Validation:** Strong input validation for all user data, including custom password and username policies.
+- **Database Seeding & Export:** Seed the database with test data and export/import DB state for testing.
+- **Testing & CI:** Jest for unit tests, GitHub Actions for CI/CD, with database reset and reseed on test runs.
+- **Logging:** Centralized logging for audit and debugging.
+
+---
+
+## Tech Stack
+
+<p>
+   <img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white" alt="Node.js" />
+   <img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white" alt="Express.js" />
+   <img src="https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white" alt="MongoDB" />
+   <img src="https://img.shields.io/badge/Handlebars.js-f0772b?logo=handlebarsdotjs&logoColor=white" alt="Handlebars.js" />
+   <img src="https://img.shields.io/badge/Mapbox-4264fb?logo=mapbox&logoColor=white" alt="Mapbox" />
+   <img src="https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white" alt="Cloudinary" />
+   <img src="https://img.shields.io/badge/Jest-C21325?logo=jest&logoColor=white" alt="Jest" />
+   <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=github-actions&logoColor=white" alt="GitHub Actions" />
+</p>
+
+- Backend: Node.js, Express.js
+- Database: MongoDB (native driver)
+- Frontend: Handlebars, JavaScript (ES6+), CSS3
+- APIs: Mapbox (maps/geocoding), Cloudinary (image hosting), Nodemailer (email)
+- DevOps: Jest (unit testing), GitHub Actions (CI/CD)
+- Security: bcrypt, express-session, xss, dotenv
+
+
+---
+
+## Setup & Local Development
+
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/sivaanand13/photography-spot-finder.git
+cd photography-spot-finder
+npm install
+```
+
+### 2. Seed the Database
+```bash
+npm run seed
+```
+
+### 3. Configure Environment
+Create a `.env` file in the root directory:
 ```
 MAPBOX_API_TOKEN="api-key-here"
 CLOUDINARY_API_KEY="api-key-here"
@@ -19,64 +158,37 @@ EMAIL_USER="email-here"
 EMAIL_PASS="email-app-password-here"
 ```
 
-Step 4: Finally, run the application using `npm start`. The application will run on port 3000 of the host machine.
+### 4. Start the Application
+```bash
+npm start
+```
+The app will run on [http://localhost:3000](http://localhost:3000)
 
-**Note:** While testing our application, if you delete an asset that contains an image, we also **made sure it is deleted in the cloud** (for storage optimization and to prevent orphan images in the cloud). So, if you reseed the database using the seed command after deleting an asset with an image, the image will not be shown. Alternately, you can run `npm run export` to export your current database state and then run the seed command to reflect the deleted assets. We currently provided **enough seed data to test all aspects and features** but deleting an asset with an image will require adding more assets with images and then exporting the current database state to test them again.
+**Note:**
+- Deleting an asset with an image will also delete the image from Cloudinary.
+- If you reseed after deleting assets, images may not appear unless you re-add them and export the DB state.
+- Use `npm run export` to export your current DB state.
 
-**Admin credentials**:
-
+**Admin credentials for demo:**
 - username: sivaanand
 - password: Password@1234
 
-## Core Features
 
-1. **Landing Page:** Introduces the platform’s purpose and provides links to the top three rated photography spots of the month.
+---
 
-   - Features a prominent search bar allowing users to look up specific locations or by tag.
-   - To qualify for the top-rated spots, a location must have at least five ratings and an average score of 7.5 or above (out of 10\) within the current month. If no spots meet this criterion, only the platform's purpose and search bar are displayed.
-   - **Extra:** We also added a section that lists the current contest leaders.
+## Testing & CI
+- Run all unit tests:
+```bash
+npm run test
+```
+This will empty the database, run tests, and reseed the database. All tests are run automatically on every pull request via GitHub Actions.
 
-2. **Spots List Page:** Displays a list of all photography spots on the platform. Users can filter spots based on timestamp, tags, ratings, or keywords.
+---
 
-3. **Photography Spot Submission:** Registered users can submit new photography spots, including
+## Seeding & Exporting Data
+- `npm run seed` — Seed the database with demo/test data
+- `npm run export` — Export the current database state
 
-   - Spot Location (using an integrated map)
-   - Description
-   - Accessibility (public, restricted, free, paid, etc.)
-   - Best photography times
-   - Between 1 and 3 pictures of the spot
-   - Up to five optional tags (e.g., cityscape, sunset, nature).
-
-4. **Spot Detail Page:** Displays detailed information about each spot, including user-submitted photos, ratings, and tags.
-
-   - Users can add their own photos of the spot
-   - A comments section allows users to share experiences or tips
-   - Users can rate spots on a scale of one to ten
-   - Maps API Integration \- Integrates maps to show spot locations.
-
-5. **Monthly Photo Contest:**
-
-   - A monthly photo contest allows users to submit photos taken at featured spots (top 3 spots at the end of the previous month) \- users have a limit of three submissions
-   - Other users can upvote or downvote photos to select the winners \- users only have one vote per photo (they can switch votes)
-   - **Note:** The contest submission form uses AJAX
-
-6. **User Profile Page:**
-
-   - Users can modify their own profile (password, bio, etc.)
-   - The user’s profile page includes all the spots, ratings, comments and contest submissions they have posted
-   - Also includes Favorite Spots Section \- Users can save their favorite photography spots in their profile for easy access.
-   - Users can modify or remove their spots, ratings, or comments from this page.
-
-7. **Report Feature & Admin Panel:**
-   - Users can report inappropriate content (limit of one report per item)
-   - Admins can manage and moderate spots, comments, and contest submissions, with the ability to remove flagged content.
-8. **Public Profile Page:** Displays a user’s bio, their favorite spots, submitted spots, comments and contest submissions.
-
-## Extra Features
-
-1. **Search Spots by Location:** Users can search spots near their physical location by providing a distance search radius and see interactively in a map all the spots around them. Users can then click on a spot marker to see a brief info regarding the spot and then access the full spot detail if they wish to do so.
-2. **User Verification:** Perform user verification using verification link or OTP to verify user email address. The user’s public profile will then list them as verified. Editing/Removing the existing email will mark the user as `not verfied`.
-3. **Search Users:** Visitors and existing users can search for other users by entering a name or username, and then visit their profiles directly from the results to have quick and easy access to a user’s submitted spots, comments, favorite spots, and contest submissions, instead of going to a spot detail page and then visiting a profile from there.
 
 ## Github link
 
