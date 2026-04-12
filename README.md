@@ -6,16 +6,14 @@ Discover, share, and explore the best photography locations in New York City! Ph
 ---
 
 ## Table of Contents
+
 - [Demo Preview](#demo-preview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Security & Validation](#security--validation)
 - [Setup & Local Development](#setup--local-development)
 - [Testing & CI](#testing--ci)
 - [Seeding & Exporting Data](#seeding--exporting-data)
-- [Contribution](#contribution)
-- [License](#license)
-- [Contact](#contact)
+- [Github link](#github-link)
 
 ---
 
