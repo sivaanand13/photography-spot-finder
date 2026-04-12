@@ -175,6 +175,9 @@ The app will run on [http://localhost:3000](http://localhost:3000)
 ---
 
 ## Testing & CI
+
+We conducted unit testing using jest and have used a github workflow to create CI pipeline.
+
 - Run all unit tests:
 ```bash
 npm run test
@@ -191,7 +194,3 @@ This will empty the database, run tests, and reseed the database. All tests are 
 ## Github link
 
 [https://github.com/sivaanand13/photography-spot-finder](https://github.com/sivaanand13/photography-spot-finder)
-
-## Unit testing
-
-We conducted unit testing using jest and have used a github workflow to create CI pipeline. You can run the tests using the command `npm run test`. This will empty the database, run the tests and then reseed the database.
